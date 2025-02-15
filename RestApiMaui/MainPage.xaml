@@ -5,19 +5,27 @@
              Title="Rest Api">
 
     <Grid RowDefinitions="Auto,*"
-            Padding="20">
+          Padding="20">
         <!-- Buttons in the first row -->
         <VerticalStackLayout Grid.Row="0"
-                Spacing="10">
+                             Spacing="10">
             <Button Text="Get All Users"
                     Command="{Binding GetAllUsersCommand}"/>
             <Button Text="Add User"
-                   Clicked="onAddUserButton"/>
+                    Clicked="onAddUserButton"/>
         </VerticalStackLayout>
 
+        <!-- Activity Indicator -->
+        <ActivityIndicator Grid.Row="1"
+                           IsRunning="{Binding IsLoading}"
+                           IsVisible="{Binding IsLoading}"
+                           Color="Blue"
+                           VerticalOptions="Center"
+                           HorizontalOptions="Center"/>
+
         <!-- ScrollView in the second row -->
-        <ScrollView Grid.Row="1"
-                Padding="0,20,0,0">
+        <ScrollView Grid.Row="2"
+                    Padding="0,20,0,0">
             <CollectionView ItemsSource="{Binding users}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>

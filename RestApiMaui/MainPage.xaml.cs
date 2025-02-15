@@ -14,6 +14,18 @@ public partial class MainPage : ContentPage
 
 	public ObservableCollection<Users> users { get; set; } = new ObservableCollection<Users>();
 
+
+	private bool _isLoading;
+	public bool IsLoading
+	{
+		get => _isLoading;
+		set
+		{
+			_isLoading = value;
+			OnPropertyChanged(nameof(IsLoading));
+		}
+	}
+
 	public MainPage()
 	{
 		InitializeComponent();
@@ -27,6 +39,8 @@ public partial class MainPage : ContentPage
 	{
 		try
 		{
+			IsLoading = true; // Show loader
+			users.Clear();
 			var url = $"{baseUrl}/users/";
 			var response = await client.GetAsync(url);
 
@@ -53,15 +67,19 @@ public partial class MainPage : ContentPage
 		{
 			await DisplayAlert("Error", ex.Message, "OK");
 		}
+		finally
+		{
+			IsLoading = false; // Hide loader
+		}
 	});
 
-	
-	private void onAddUserButton(object sender, EventArgs e) 
+
+	private void onAddUserButton(object sender, EventArgs e)
 	{
 		var addUserPage = new AddUserPage();
-        Navigation.PushAsync(addUserPage);
+		Navigation.PushAsync(addUserPage);
 		// Refresh user list when returning
-        addUserPage.Disappearing += (s, args) => GetAllUsersCommand.Execute(null);
+		addUserPage.Disappearing += (s, args) => GetAllUsersCommand.Execute(null);
 
 	}
 
